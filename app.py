@@ -8,11 +8,16 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 app = Flask(__name__)
 
 # 設定 OpenAI API Key
-openai.api_key = "你的OpenAI API Key"
+openai.api_key = os.environ.get("OPENAI_API_KEY")
+if openai.api_key is None:
+    raise ValueError("❌ OPENAI_API_KEY 未設置！")
 
 # 設定 LINE 官方帳號的 Token & Secret
-LINE_ACCESS_TOKEN = "你的 LINE Access Token"
-LINE_CHANNEL_SECRET = "你的 LINE Channel Secret"
+LINE_ACCESS_TOKEN = os.environ.get("LINE_ACCESS_TOKEN")
+LINE_CHANNEL_SECRET = os.environ.get("LINE_CHANNEL_SECRET")
+
+if LINE_ACCESS_TOKEN is None or LINE_CHANNEL_SECRET is None:
+    raise ValueError("❌ LINE_ACCESS_TOKEN 或 LINE_CHANNEL_SECRET 未設置！")
 
 line_bot_api = LineBotApi(LINE_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
